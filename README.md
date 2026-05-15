@@ -1,113 +1,83 @@
-# The Office — Organizational Chart
+# The Office — Org Chart
 
-## Overview
+![GitHub last commit](https://img.shields.io/github/last-commit/chrisandrews1012/the-office-org-chart)
+![GitHub repo size](https://img.shields.io/github/repo-size/chrisandrews1012/the-office-org-chart)
+![Python Version](https://img.shields.io/badge/python-3.11-blue)
+![Stack](https://img.shields.io/badge/stack-Streamlit%20%7C%20SQLAlchemy%20%7C%20NetworkX%20%7C%20PostgreSQL-blue)
 
-A fun, interactive organizational chart visualizing the hierarchy of the Dunder Mifflin Scranton branch from the beloved TV show, "The Office".
+A Dunder Mifflin org chart builder with real database constraints, graph export, and full CRUD.
 
-## Technical Highlights
+## Problem Statement
 
-- **SQLAlchemy (ORM)**: Models the employee hierarchy across three tiers — employees, managers, and executives. Handles complex queries and manages database sessions through custom context managers and decorators.
-- **Pydantic (Data Validation)**: All input is validated before it touches the database. This is the same pattern used in ML model serving to catch bad data at the boundary.
-- **PostgreSQL**: Stores and queries the organizational structure. The app connects through a scoped, non-superuser role following least-privilege principles.
-- **Docker and Docker Compose**: The app and database run as containerized services, making the environment consistent and easy to spin up.
-- **NetworkX (Graph Theory)**: Builds a directed graph from SQL query results to represent the reporting hierarchy — the same kind of structure used in dependency graphs and graph neural networks.
-- **Streamlit**: Powers the multi-page frontend without any HTML or JavaScript boilerplate.
+Managing a multi-tier organizational hierarchy isn't just a CRUD problem. The challenge is enforcing structural rules (executives have no supervisors, managers report to executives, employees report to managers) while handling edge cases like cascading deletes, subordinate reassignment, and preventing orphaned records. The goal was to build something that gets these constraints right at every layer.
 
-## Features
+## Approach
 
-- **Data Pipeline**: `build.py` includes a `rebuild` command that clears and reconstructs the database in the correct dependency order using bulk inserts.
-- **Interactive Org Chart**: Browse the full chain of command across all three tiers through a clean multi-page Streamlit interface.
-- **Error Handling**: Database errors, session rollbacks, and exception definitions are all centralized and managed consistently across the app.
-- **Tests**: Covers validation logic, ID generation, and UI components using pytest, pytest-mock, and pytest-cov.
+The hierarchy is modeled as three SQLAlchemy ORM tables (`SQLExecutive`, `SQLManager`, `SQLEmployee`) with foreign key relationships enforcing the reporting structure. Pydantic validates all input at the boundary before it touches the database. A custom decorator centralizes error handling and session rollback across every database operation.
 
-## Project Structure
+NetworkX represents the org structure as a directed graph built directly from SQL query results, the same pattern used in dependency resolution and graph neural network pipelines. The graph can be exported as Cytoscape JSON for external visualization.
 
-```
-theoffice-orgchart/
-├── app.py                    # Streamlit entry point
-├── build.py                  # Data pipeline
-├── docker-compose.yml        # Service orchestration
-├── pyproject.toml            # Dependencies (uv)
-├── config/                   # Environment and database configuration
-├── handler/
-│   └── cursor.py             # Session and cursor management
-├── models/
-│   └── orgchart.py           # SQLAlchemy ORM models
-├── pages/
-│   ├── Home.py               # Landing page
-│   └── ChainOfCommand.py     # Chain-of-command explorer
-├── utilities/
-│   ├── connection_helper.py  # Database connection factory
-│   ├── errors.py             # Exception definitions
-│   ├── graph_builder.py      # NetworkX graph construction
-│   ├── id_generator.py       # ID generation logic
-│   ├── session_helper.py     # Session context manager
-│   └── validation.py         # Pydantic input validation
-└── tests/
-    ├── conftest.py
-    ├── test_id_generator.py
-    ├── test_ui_components.py
-    └── test_validation.py
+Streamlit ties it together as a multi-page app with full CRUD across all three employee tiers. A separate `build.py` script handles database initialization using bulk inserts in the correct dependency order.
+
+## Results
+
+| Tier | Reports To | Can Have Subordinates |
+|---|---|---|
+| Executive | | Managers |
+| Manager | Executive | Employees |
+| Employee | Manager | |
+
+The app supports add, update, and delete for all three tiers, with optional subordinate reassignment on delete and live graph construction exportable to Cytoscape.
+
+## How to Run
+
+```bash
+git clone https://github.com/chrisandrews1012/the-office-org-chart.git
+cd the-office-org-chart
+uv sync
+cp .template.env .env  # fill in your database credentials
 ```
 
-## Getting Started
+```bash
+docker compose up -d
+uv run python build.py rebuild
+uv run streamlit run app.py
+```
 
-### Prerequisites
+> **Note:** The Docker Compose network setup is currently being refined. Start the Streamlit app manually in a separate terminal for now.
 
-- [Docker](https://www.docker.com/) and Docker Compose
-- Python 3.11+ and [uv](https://docs.astral.sh/uv/)
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/theoffice-orgchart.git
-   cd theoffice-orgchart
-   ```
-
-2. Sync the dependencies:
-   ```bash
-   uv sync
-   ```
-
-3. Copy the environment template and fill in your database credentials:
-   ```bash
-   cp template.env .env
-   ```
-
-   | Variable | Description |
-   |---|---|
-   | `PG_USER` | PostgreSQL superuser username |
-   | `PG_PASSWORD` | PostgreSQL superuser password |
-   | `PG_DATABASE` | Database name |
-   | `PG_PORT` | Host port mapped to container port `5432` |
-   | `DB_HOST` | Database hostname (typically `localhost`) |
-   | `DB_USER` | Application-level database role |
-   | `DB_USER_PW` | Password for the application role |
-
-4. Start the database container:
-   ```bash
-   docker compose up -d
-   ```
-
-   > **Note:** The Docker Compose network setup is currently being refined. Start the Streamlit app manually in a separate terminal for now.
-
-5. In another terminal, run the build pipeline to initialize the database:
-   ```bash
-   uv run python build.py rebuild
-   ```
-
-6. Start the app:
-   ```bash
-   uv run streamlit run app.py
-   ```
-
-7. Visit `http://localhost:8501` in your browser.
-
-## Running Tests
+**Tests**
 
 ```bash
 uv run pytest tests/ -v --cov
+```
+
+## File Structure
+
+```
+the-office-org-chart/
+├── app.py
+├── build.py
+├── docker-compose.yml
+├── pyproject.toml
+├── data/
+│   ├── external/
+│   ├── interim/
+│   ├── processed/
+│   └── raw/
+├── models/
+├── notebooks/
+├── reports/
+│   └── figures/
+├── src/
+│   └── officegraph/
+│       ├── config/
+│       ├── handler/
+│       ├── models/
+│       ├── pages/
+│       ├── ui/
+│       └── utilities/
+└── tests/
 ```
 
 ## License
