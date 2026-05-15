@@ -1,5 +1,5 @@
 import streamlit as st
-from handler.cursor import Connection
+from officegraph.handler.cursor import Connection
 
 def get_db_connection() -> Connection:
     """Get or create database connection in session state"""

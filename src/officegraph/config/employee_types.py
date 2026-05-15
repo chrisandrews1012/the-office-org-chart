@@ -1,7 +1,7 @@
 from enum import Enum
 from dataclasses import dataclass
 from typing import Type, Optional
-from models.orgchart import SQLExecutive, SQLManager, SQLEmployee
+from officegraph.models.orgchart import SQLExecutive, SQLManager, SQLEmployee
 
 
 class EmployeeLevel(Enum):

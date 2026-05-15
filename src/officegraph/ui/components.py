@@ -6,7 +6,7 @@ Eliminates UI pattern duplication across pages.
 import streamlit as st
 import time
 from typing import List, Optional
-from models.orgchart import Employee
+from officegraph.models.orgchart import Employee
 
 
 class UIHelper:

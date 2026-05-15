@@ -1,6 +1,6 @@
 import streamlit as st
 from typing import Dict, Optional
-from models.orgchart import Employee, DepartmentType
+from officegraph.models.orgchart import Employee, DepartmentType
 
 
 class EmployeeFormBuilder:

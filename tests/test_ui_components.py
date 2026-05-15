@@ -4,7 +4,7 @@ Note: These tests focus on testable logic. Full UI testing requires Streamlit ru
 """
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from models.orgchart import Employee
+from officegraph.models.orgchart import Employee
 
 
 class TestEmployeeSelector:
@@ -61,21 +61,21 @@ class TestSupervisorSelector:
 class TestUIHelper:
     """Test cases for UIHelper utility methods"""
 
-    @patch('ui.components.st')
+    @patch('officegraph.ui.components.st')
     def test_show_error(self, mock_st):
         """Test error message display"""
-        from ui.components import UIHelper
+        from officegraph.ui.components import UIHelper
 
         error_message = "Test error message"
         UIHelper.show_error(error_message)
 
         mock_st.error.assert_called_once_with(error_message)
 
-    @patch('ui.components.st')
-    @patch('ui.components.time')
+    @patch('officegraph.ui.components.st')
+    @patch('officegraph.ui.components.time')
     def test_show_success_and_rerun(self, mock_time, mock_st):
         """Test success message with rerun"""
-        from ui.components import UIHelper
+        from officegraph.ui.components import UIHelper
 
         success_message = "Test success message"
         UIHelper.show_success_and_rerun(success_message, delay=1)

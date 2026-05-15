@@ -2,7 +2,7 @@
 Unit tests for employee validation utilities
 """
 import pytest
-from utilities.validation import EmployeeValidator
+from officegraph.utilities.validation import EmployeeValidator
 
 
 class TestEmployeeValidator:

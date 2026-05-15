@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
-from handler.cursor import Connection
-from models.orgchart import SQLEmployee, SQLManager, SQLExecutive
+from officegraph.handler.cursor import Connection
+from officegraph.models.orgchart import SQLEmployee, SQLManager, SQLExecutive
 from sqlalchemy.orm import Session
-from utilities.id_generator import generate_employee_id
+from officegraph.utilities.id_generator import generate_employee_id
 from collections import defaultdict
 import sys
 

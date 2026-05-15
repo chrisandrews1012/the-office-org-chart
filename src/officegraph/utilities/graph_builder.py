@@ -1,10 +1,10 @@
 import networkx as nx
 import streamlit as st
-from models.orgchart import SQLEmployee, SQLManager, SQLExecutive
-from utilities.connection_helper import get_db_connection
+from officegraph.models.orgchart import SQLEmployee, SQLManager, SQLExecutive
+from officegraph.utilities.connection_helper import get_db_connection
 from sqlalchemy import text
-from utilities.session_helper import get_readonly_session
-from utilities.errors import handle_db_errors
+from officegraph.utilities.session_helper import get_readonly_session
+from officegraph.utilities.errors import handle_db_errors
 
 client = get_db_connection()
 

@@ -1,12 +1,12 @@
 import streamlit as st
-from models.orgchart import SQLEmployee, SQLManager, SQLExecutive, Employee
-from utilities.connection_helper import get_db_connection
-from config.employee_types import get_config_by_name, EMPLOYEE_TYPES
-from ui.styles import get_base_styles, render_page_header
-from ui.components import UIHelper, EmployeeSelector, SupervisorSelector
-from ui.forms import EmployeeFormBuilder
+from officegraph.models.orgchart import SQLEmployee, SQLManager, SQLExecutive, Employee
+from officegraph.utilities.connection_helper import get_db_connection
+from officegraph.config.employee_types import get_config_by_name, EMPLOYEE_TYPES
+from officegraph.ui.styles import get_base_styles, render_page_header
+from officegraph.ui.components import UIHelper, EmployeeSelector, SupervisorSelector
+from officegraph.ui.forms import EmployeeFormBuilder
 import json
-from utilities.graph_builder import build_org_graph
+from officegraph.utilities.graph_builder import build_org_graph
 import networkx as nx
 
 # Page Configurations

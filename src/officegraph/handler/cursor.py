@@ -1,11 +1,11 @@
 import os
-from utilities.validation import EmployeeValidator
-from utilities.id_generator import generate_employee_id
-from utilities.errors import handle_db_errors
-from utilities.session_helper import get_session, get_readonly_session
+from officegraph.utilities.validation import EmployeeValidator
+from officegraph.utilities.id_generator import generate_employee_id
+from officegraph.utilities.errors import handle_db_errors
+from officegraph.utilities.session_helper import get_session, get_readonly_session
 from sqlalchemy import create_engine, insert, select, delete, exists, URL
-from models.orgchart import SQLExecutive, SQLManager, SQLEmployee, Employee
-from config.employee_types import get_config_by_table
+from officegraph.models.orgchart import SQLExecutive, SQLManager, SQLEmployee, Employee
+from officegraph.config.employee_types import get_config_by_table
 
 
 class Connection:

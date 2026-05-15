@@ -2,7 +2,7 @@
 Unit tests for employee ID generation utilities
 """
 import pytest
-from utilities.id_generator import generate_employee_id
+from officegraph.utilities.id_generator import generate_employee_id
 
 
 class TestIDGenerator:

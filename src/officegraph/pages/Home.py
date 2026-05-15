@@ -1,6 +1,6 @@
 import streamlit as st
-from utilities.connection_helper import get_db_connection
-from ui.styles import get_base_styles
+from officegraph.utilities.connection_helper import get_db_connection
+from officegraph.ui.styles import get_base_styles
 
 st.set_page_config(
     page_title="*The Office* Chain of Command Builder", 
