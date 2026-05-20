@@ -35,7 +35,20 @@ The app supports add, update, and delete for all three tiers, with optional subo
 git clone https://github.com/chrisandrews1012/the-office-org-chart.git
 cd the-office-org-chart
 uv sync
-cp .template.env .env  # fill in your database credentials
+cp .template.env .env
+```
+
+Fill in `.env` before running (example values):
+
+```
+PG_PASSWORD=supersecret
+PG_USER=postgres
+PG_DATABASE=officegraph
+PG_PORT=5432
+
+DB_HOST=localhost
+DB_USER=appuser
+DB_USER_PW=appsecret
 ```
 
 ```bash
@@ -60,24 +73,35 @@ the-office-org-chart/
 ├── build.py
 ├── docker-compose.yml
 ├── pyproject.toml
-├── data/
-│   ├── external/
-│   ├── interim/
-│   ├── processed/
-│   └── raw/
-├── models/
-├── notebooks/
-├── reports/
-│   └── figures/
 ├── src/
 │   └── officegraph/
 │       ├── config/
+│       │   ├── 00_init.sh
+│       │   ├── 00_init.sql
+│       │   └── employee_types.py
 │       ├── handler/
+│       │   └── cursor.py
 │       ├── models/
+│       │   └── orgchart.py
 │       ├── pages/
+│       │   ├── Home.py
+│       │   └── ChainOfCommand.py
 │       ├── ui/
+│       │   ├── components.py
+│       │   ├── forms.py
+│       │   └── styles.py
 │       └── utilities/
+│           ├── connection_helper.py
+│           ├── errors.py
+│           ├── graph_builder.py
+│           ├── id_generator.py
+│           ├── session_helper.py
+│           └── validation.py
 └── tests/
+    ├── conftest.py
+    ├── test_id_generator.py
+    ├── test_ui_components.py
+    └── test_validation.py
 ```
 
 ## License
